@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <title>Node SMS</title>
+</head>
+<body>
+    <div class="container mt-3" style="width: 50%;">
+        <h2>Send SMS Message</h2>
+        <div class="form-group">
+            <input type="tel" name="number" id="number" class="form-control" placeholder="Enter Phone Number">
+        </div>
+        <div class="form-group">
+            <input type="text" name="msg" id="msg" class="form-control" placeholder="Enter Text Message">
+        </div>
+        <input type="button" id="button" value="Send Text" class="btn btn-dark">
+        <p class="response"></p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
