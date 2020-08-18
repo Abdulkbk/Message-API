@@ -1,7 +1,6 @@
 const express = require('express');
 const Nexmo = require('nexmo');
-const socketio = require('socket.io');
-const ejs = require('ejs');
+const path = require('path');
 
 // init Nexmo
 const nexmo = new Nexmo({
@@ -12,25 +11,14 @@ const nexmo = new Nexmo({
 // init app
 const app = express();
 
-// Template setup
-app.set('view engine', 'html');
-app.engine('html', ejs.renderFile);
-
-// Parsing
+// Parsing body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Get Routes
-app.get('/', (req, res) => {
-    res.render('index');
-});
-
-// Post Route
+// Post Handler Route
 app.post('/', (req, res) => {
-    // res.send(req.body);
-    console.log(req.body);
     const number = req.body.number;
-    const text = req.body.text;
+    const text = req.body.message;
 
     nexmo.message.sendSms(
         '+2348025405767', number, text, { type: 'unicode'},
@@ -40,31 +28,26 @@ app.post('/', (req, res) => {
             } else {
                 const data = {
                     id: resData.messages[0]['message-id'],
-                    number: resData.messages[0]['to']
+                    receiver: resData.messages[0]['to']
                 }
 
-                //Emit to client
-                io.emit('smsStatus', data);
+                res.send(data);
             }
         }
     );
 });
 
+//Serve static asset in production
+if(process.env.NODE_ENV) {
+    app.use(express.static('client/build'));
 
-// Public folder
-app.use(express.static('public'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    });
+}
 
 // Port
-const port = 3000;
+const port = process.env.PORT || 4000;
 
 // Server
 const server = app.listen(port, () => console.log(`Server started on port ${port}`));
-
-// Connect to socket.io
-const io = socketio(server);
-io.on('connection', socket => {
-    console.log('Connected io');
-    io.on('disconnect', () => {
-        console.log('Disconnected');
-    })
-});
