@@ -37,7 +37,7 @@ class Panel extends Component {
 
     render() {
         return (
-            <div className="container mt-3" style={{width: 500}} >
+            <div className="container panel mt-5" >
                 <h3>Send Text Message</h3>
                 <div className="form-group">
                     <input className="form-control" type="tel" name="number" id="number" placeholder="Enter Phone no." value={this.state.number} onChange={this.handleChange}/>

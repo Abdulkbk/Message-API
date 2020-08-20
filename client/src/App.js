@@ -4,7 +4,7 @@ import Footer from './components/messagePanel/Footer'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App container">
       <Panel />
       <Footer />
     </div>
